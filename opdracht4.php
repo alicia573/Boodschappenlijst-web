@@ -1,45 +1,36 @@
 <?php
-if ( isset( $_POST['text'] ) ) {
-    $text = $_POST['text'];
 
-    if ( isset( $_POST['previous'] ) ) {
-        $current = $_POST['previous'] . "," . $_POST['text'];
-    } else {
-        $current = $_POST['text'];
-    }
+session_start();
+
+if(!isset($_SESSION['text'])){
+
+    $_SESSION['text'] = array();
 }
+
+if($_SERVER['REQUEST_METHOD'] == 'POST' && strlen($_POST['text']) > 0){
+    $_SESSION['text'][] = htmlspecialchars($_POST['text'], ENT_QUOTES);
+}
+
 ?>
 <html lang="en">
 <head>
     <title>Booschappenlijst </title>
 </head>
-
     <body>
-        <div>
-            <?php
-            if ( isset( $_POST['text'] ) ) {
-                $text_arr = explode(",", $current);
-                echo "<ul>";
-                foreach ( $text_arr as $text ) {
-                    echo "<li>".$text."</li>";
-                }
-                echo "</ul>";
-            }
-            ?>
-        </div>
+    <div>
+        <ul>
+            <?php foreach($_SESSION['text'] AS $text): ?>
+                <li><?php echo $text; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 
-        <form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
-
-            <?php if ( isset( $_POST['text'] ) ) { ?> # If the previous form submitted some text
-                <input type="hidden" name="previous" value="<?php echo $current ?>"
-             }
-            <?php } ?>
-
-            <label> Voeg toe:
-                <input type="text" name="text" />
-            </label><br/>
-            <input type="submit" value="Submit" />
-        </form>
+    <form method="POST">
+        <label>Voeg toe:
+            <input type="text" name="text" />
+        </label><br/>
+        <input type="submit" value="Verstuur"/>
+    </form>
     </body>
 </html>
 
