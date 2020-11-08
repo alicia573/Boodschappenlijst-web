@@ -33,4 +33,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && strlen($_POST['text']) > 0){
     </form>
     </body>
 </html>
+<?php
+if(isset($_POST['delete']))
+{
 
+}
+?>
